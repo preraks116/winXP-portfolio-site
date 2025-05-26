@@ -15,10 +15,13 @@ import {
   END_SELECT,
   POWER_OFF,
   CANCEL_POWER_OFF,
+  FORCE_DEL_APP,
 } from './constants/actions';
 import { FOCUSING, POWER_STATE } from './constants';
 import { defaultIconState, defaultAppState, appSettings } from './apps';
+import { useWindowManager } from 'hooks';
 import Modal from './Modal';
+import WindowLimitModal from './WindowLimitModal';
 import Footer from './Footer';
 import Windows from './Windows';
 import Icons from './Icons';
@@ -68,6 +71,18 @@ const reducer = (state, action = { type: '' }) => {
       };
     case DEL_APP:
       if (state.focusing !== FOCUSING.WINDOW) return state;
+      return {
+        ...state,
+        apps: state.apps.filter(app => app.id !== action.payload),
+        focusing:
+          state.apps.length > 1
+            ? FOCUSING.WINDOW
+            : state.icons.find(icon => icon.isFocus)
+            ? FOCUSING.ICON
+            : FOCUSING.DESKTOP,
+      };
+    case FORCE_DEL_APP:
+      // Force delete without checking focus state - used for auto-closing
       return {
         ...state,
         apps: state.apps.filter(app => app.id !== action.payload),
@@ -177,6 +192,15 @@ function WinXP() {
   const [state, dispatch] = useReducer(reducer, initState);
   const ref = useRef(null);
   const mouse = useMouse(ref);
+  const {
+    checkWindowLimit,
+    incrementWindowCount,
+    decrementWindowCount,
+    showLimitModal,
+    limitedAppName,
+    closeLimitModal,
+  } = useWindowManager();
+
   const focusedAppId = getFocusedAppId();
   const onFocusApp = useCallback(id => {
     dispatch({ type: FOCUS_APP, payload: id });
@@ -200,11 +224,37 @@ function WinXP() {
   const onCloseApp = useCallback(
     id => {
       if (focusedAppId === id) {
+        // Find the app being closed to decrement its count
+        const closingApp = state.apps.find(app => app.id === id);
+        if (closingApp && closingApp.header && closingApp.header.title) {
+          decrementWindowCount(closingApp.header.title);
+        }
         dispatch({ type: DEL_APP, payload: id });
       }
     },
-    [focusedAppId],
+    [focusedAppId, state.apps, decrementWindowCount],
   );
+
+  // Enhanced app opening function with window limit checking
+  const openAppWithLimit = useCallback(
+    (appSetting, appName) => {
+      const displayName = appName || appSetting.header?.title || 'Unknown App';
+
+      // Check if we can open this app (limit check)
+      if (!checkWindowLimit(displayName)) {
+        return false; // Window limit reached, don't open
+      }
+
+      // Increment the count for this app
+      incrementWindowCount(displayName);
+
+      // Dispatch the app opening action
+      dispatch({ type: ADD_APP, payload: appSetting });
+      return true;
+    },
+    [checkWindowLimit, incrementWindowCount],
+  );
+
   function onMouseDownFooterApp(id) {
     if (focusedAppId === id) {
       dispatch({ type: MINIMIZE_APP, payload: id });
@@ -216,7 +266,7 @@ function WinXP() {
   function onOpenAppFromPortfolio(appName) {
     const appSetting = appSettings[appName];
     if (appSetting) {
-      dispatch({ type: ADD_APP, payload: appSetting });
+      openAppWithLimit(appSetting, appName);
     } else {
       // Show error for unknown apps
       dispatch({
@@ -232,12 +282,16 @@ function WinXP() {
   function onMouseDownIcon(id) {
     dispatch({ type: FOCUS_ICON, payload: id });
   }
+
   function onDoubleClickIcon(component) {
     const appSetting = Object.values(appSettings).find(
       setting => setting.component === component,
     );
-    dispatch({ type: ADD_APP, payload: appSetting });
+    if (appSetting) {
+      openAppWithLimit(appSetting);
+    }
   }
+
   function getFocusedAppId() {
     if (state.focusing !== FOCUSING.WINDOW) return -1;
     const focusedApp = [...state.apps]
@@ -245,22 +299,21 @@ function WinXP() {
       .find(app => !app.minimized);
     return focusedApp ? focusedApp.id : -1;
   }
+
   function onMouseDownFooter() {
     dispatch({ type: FOCUS_DESKTOP });
   }
+
   function onClickMenuItem(o) {
-    if (o === 'Internet')
-      dispatch({ type: ADD_APP, payload: appSettings['Internet Explorer'] });
+    if (o === 'Internet Explorer' || o === 'Internet')
+      openAppWithLimit(appSettings['Internet Explorer'], 'Internet Explorer');
     else if (o === 'Minesweeper')
-      dispatch({ type: ADD_APP, payload: appSettings.Minesweeper });
+      openAppWithLimit(appSettings.Minesweeper, 'Minesweeper');
     else if (o === 'My Computer')
-      dispatch({ type: ADD_APP, payload: appSettings['My Computer'] });
-    else if (o === 'Notepad')
-      dispatch({ type: ADD_APP, payload: appSettings.Notepad });
-    else if (o === 'Winamp')
-      dispatch({ type: ADD_APP, payload: appSettings.Winamp });
-    else if (o === 'Paint')
-      dispatch({ type: ADD_APP, payload: appSettings.Paint });
+      openAppWithLimit(appSettings['My Computer'], 'My Computer');
+    else if (o === 'Notepad') openAppWithLimit(appSettings.Notepad, 'Notepad');
+    else if (o === 'Winamp') openAppWithLimit(appSettings.Winamp, 'Winamp');
+    else if (o === 'Paint') openAppWithLimit(appSettings.Paint, 'Paint');
     else if (o === 'Log Off')
       dispatch({ type: POWER_OFF, payload: POWER_STATE.LOG_OFF });
     else if (o === 'Turn Off Computer')
@@ -300,6 +353,26 @@ function WinXP() {
   function onModalClose() {
     dispatch({ type: CANCEL_POWER_OFF });
   }
+
+  // Enhanced modal close handler with auto-closing functionality
+  const handleLimitModalClose = useCallback(() => {
+    const appToAutoClose = closeLimitModal();
+
+    if (appToAutoClose) {
+      // Find all windows of this app type and close the 4 oldest ones
+      const appsToClose = state.apps
+        .filter(app => app.header?.title === appToAutoClose)
+        .sort((a, b) => a.id - b.id) // Sort by ID (older IDs first)
+        .slice(0, 4); // Take the first 4 (oldest)
+
+      // Close each app and decrement counts using FORCE_DEL_APP to bypass focus checks
+      appsToClose.forEach(app => {
+        decrementWindowCount(app.header.title);
+        dispatch({ type: FORCE_DEL_APP, payload: app.id });
+      });
+    }
+  }, [closeLimitModal, state.apps, decrementWindowCount]);
+
   return (
     <Container
       ref={ref}
@@ -339,6 +412,12 @@ function WinXP() {
           onClose={onModalClose}
           onClickButton={onClickModalButton}
           mode={state.powerState}
+        />
+      )}
+      {showLimitModal && (
+        <WindowLimitModal
+          onClose={handleLimitModalClose}
+          appName={limitedAppName}
         />
       )}
     </Container>

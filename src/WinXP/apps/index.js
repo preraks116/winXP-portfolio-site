@@ -234,7 +234,7 @@ export const appSettings = {
     resizable: true,
     minimized: false,
     maximized: window.innerWidth < 800,
-    multiInstance: false,
+    multiInstance: true, // Changed from false to true
   },
   Notepad: {
     header: {
@@ -273,7 +273,7 @@ export const appSettings = {
     resizable: false,
     minimized: false,
     maximized: false,
-    multiInstance: false,
+    multiInstance: true, // Changed from false to true
   },
   Paint: {
     header: {
