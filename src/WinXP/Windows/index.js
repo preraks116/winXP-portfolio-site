@@ -79,7 +79,7 @@ const Window = memo(function({
     boundary: {
       top: 1,
       right: windowWidth - 1,
-      bottom: windowHeight - 31,
+      bottom: windowHeight - 41, // Updated to account for 40px taskbar + 1px margin
       left: 1,
     },
     resizable,
@@ -88,7 +88,7 @@ const Window = memo(function({
   let width, height, x, y;
   if (maximized) {
     width = windowWidth + 6;
-    height = windowHeight - 24;
+    height = windowHeight - 37; // Updated to account for 40px taskbar height
     x = -3;
     y = -3;
   } else {
