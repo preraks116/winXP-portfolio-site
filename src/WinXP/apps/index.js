@@ -46,6 +46,7 @@ export const defaultAppState = [
     maximized: window.innerWidth < 800,
     id: genId(),
     zIndex: genIndex(),
+    needsOpenAppProp: true, // Add this flag for the default IE instance
   },
   {
     component: Minesweeper,
@@ -174,6 +175,7 @@ export const appSettings = {
     minimized: false,
     maximized: window.innerWidth < 800,
     multiInstance: true,
+    needsOpenAppProp: true, // Add this flag to indicate this app needs onOpenApp
   },
   Minesweeper: {
     header: {

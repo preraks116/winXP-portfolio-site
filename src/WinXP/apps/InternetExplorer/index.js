@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { WindowDropDowns, Google } from 'components';
+import Portfolio from 'components/Portfolio'; // Add this import
 import dropDownData from './dropDownData';
 import ie from 'assets/windowsIcons/ie-paper.png';
 import printer from 'assets/windowsIcons/17(32x32).png';
@@ -22,11 +23,12 @@ import stop from 'assets/windowsIcons/stop.png';
 import windows from 'assets/windowsIcons/windows.png';
 import dropdown from 'assets/windowsIcons/dropdown.png';
 
-function InternetExplorer({ onClose }) {
+function InternetExplorer({ onClose, onOpenApp }) {
   const [state, setState] = useState({
-    route: 'main',
+    route: 'portfolio', // Start with portfolio instead of 'main'
     query: '',
   });
+
   function onSearch(str) {
     if (str.length) {
       setState({
@@ -35,12 +37,21 @@ function InternetExplorer({ onClose }) {
       });
     }
   }
+
+  function goHome() {
+    setState({
+      route: 'portfolio', // Go to portfolio instead of 'main'
+      query: '',
+    });
+  }
+
   function goMain() {
     setState({
       route: 'main',
       query: '',
     });
   }
+
   function onClickOptionItem(item) {
     switch (item) {
       case 'Close':
@@ -48,11 +59,35 @@ function InternetExplorer({ onClose }) {
         break;
       case 'Home Page':
       case 'Back':
-        goMain();
+        goHome(); // Use goHome instead of goMain
         break;
       default:
     }
   }
+
+  // Handle app opening requests from portfolio
+  function handleOpenApp(appName) {
+    if (onOpenApp) {
+      onOpenApp(appName);
+    }
+  }
+
+  // Get the appropriate URL for address bar
+  function getAddressBarUrl() {
+    switch (state.route) {
+      case 'portfolio':
+        return 'https://johndeveloper.portfolio.local/';
+      case 'search':
+        return `https://www.google.com.tw/search?q=${encodeURIComponent(
+          state.query,
+        )}`;
+      case 'main':
+        return 'https://www.google.com.tw';
+      default:
+        return 'https://johndeveloper.portfolio.local/';
+    }
+  }
+
   return (
     <Div>
       <section className="ie__toolbar">
@@ -67,10 +102,8 @@ function InternetExplorer({ onClose }) {
       </section>
       <section className="ie__function_bar">
         <div
-          onClick={goMain}
-          className={`ie__function_bar__button${
-            state.route === 'main' ? '--disable' : ''
-          }`}
+          onClick={state.route === 'portfolio' ? goMain : goHome}
+          className={`ie__function_bar__button`}
         >
           <img className="ie__function_bar__icon" src={back} alt="" />
           <span className="ie__function_bar__text">Back</span>
@@ -90,7 +123,7 @@ function InternetExplorer({ onClose }) {
             alt=""
           />
         </div>
-        <div className="ie__function_bar__button" onClick={goMain}>
+        <div className="ie__function_bar__button" onClick={goHome}>
           <img className="ie__function_bar__icon--margin-1" src={home} alt="" />
         </div>
         <div className="ie__function_bar__separate" />
@@ -137,11 +170,7 @@ function InternetExplorer({ onClose }) {
         <div className="ie__address_bar__content">
           <img src={ie} alt="ie" className="ie__address_bar__content__img" />
           <div className="ie__address_bar__content__text">
-            {`https://www.google.com.tw${
-              state.route === 'search'
-                ? `/search?q=${encodeURIComponent(state.query)}`
-                : ''
-            }`}
+            {getAddressBarUrl()}
           </div>
           <img
             src={dropdown}
@@ -165,12 +194,17 @@ function InternetExplorer({ onClose }) {
       </section>
       <div className="ie__content">
         <div className="ie__content__inner">
-          <Google
-            route={state.route}
-            query={state.query}
-            onSearch={onSearch}
-            goMain={goMain}
-          />
+          {/* Conditional rendering based on route */}
+          {state.route === 'portfolio' ? (
+            <Portfolio onOpenApp={handleOpenApp} />
+          ) : (
+            <Google
+              route={state.route}
+              query={state.query}
+              onSearch={onSearch}
+              goMain={goMain}
+            />
+          )}
         </div>
       </div>
       <footer className="ie__footer">
@@ -192,6 +226,7 @@ function InternetExplorer({ onClose }) {
   );
 }
 
+// Keep the same styled component as before
 const Div = styled.div`
   height: 100%;
   width: 100%;
@@ -392,18 +427,19 @@ const Div = styled.div`
   }
   .ie__content {
     flex: 1;
-    overflow: auto;
+    overflow: hidden; /* Remove IE scrollbar - let iframe handle scrolling */
     padding-left: 1px;
     border-left: 1px solid #6f6f6f;
+    border-right: 1px solid #6f6f6f;
+    border-bottom: 1px solid #6f6f6f;
     background-color: #f1f1f1;
     position: relative;
   }
   .ie__content__inner {
     position: relative;
-    min-height: 800px;
-    min-width: 800px;
     width: 100%;
     height: 100%;
+    /* Remove min-height and min-width constraints and let content determine size */
   }
   .ie__footer {
     height: 20px;

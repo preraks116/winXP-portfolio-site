@@ -212,6 +212,23 @@ function WinXP() {
       dispatch({ type: FOCUS_APP, payload: id });
     }
   }
+
+  function onOpenAppFromPortfolio(appName) {
+    const appSetting = appSettings[appName];
+    if (appSetting) {
+      dispatch({ type: ADD_APP, payload: appSetting });
+    } else {
+      // Show error for unknown apps
+      dispatch({
+        type: ADD_APP,
+        payload: {
+          ...appSettings.Error,
+          injectProps: { message: `Application "${appName}" not found` },
+        },
+      });
+    }
+  }
+
   function onMouseDownIcon(id) {
     dispatch({ type: FOCUS_ICON, payload: id });
   }
@@ -308,6 +325,7 @@ function WinXP() {
         onMinimize={onMinimizeWindow}
         onMaximize={onMaximizeWindow}
         focusedAppId={focusedAppId}
+        onOpenApp={onOpenAppFromPortfolio} // ADD THIS PROP
       />
       <Footer
         apps={state.apps}
