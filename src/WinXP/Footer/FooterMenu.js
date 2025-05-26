@@ -223,8 +223,9 @@ function Item({
   );
 }
 export default styled(FooterMenu)`
-  font-size: 11px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 18px;
+  font-family: 'Tahoma', Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -335,8 +336,8 @@ export default styled(FooterMenu)`
   .footer__item__img {
     border-radius: 3px;
     margin-right: 2px;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
   }
   .menu {
     display: flex;
@@ -412,12 +413,12 @@ export default styled(FooterMenu)`
     margin-bottom: 4px;
   }
   .menu__left .menu__item {
-    height: 34px;
+    height: 44px;
   }
   .menu__right .menu__item {
-    height: 26px;
+    height: 34px;
     margin-bottom: 4px;
-    line-height: 13px;
+    line-height: 16px;
   }
   .menu__item:hover {
     color: white;
@@ -435,13 +436,13 @@ export default styled(FooterMenu)`
   }
   .menu__right .menu__item__img {
     margin-right: 3px;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
   }
   .menu__left .menu__item__img {
     margin-right: 3px;
-    width: 30px;
-    height: 30px;
+    width: 38px;
+    height: 38px;
   }
   .menu__right .menu__item:nth-child(-n + 5),
   .menu__left .menu__item:nth-child(-n + 2),

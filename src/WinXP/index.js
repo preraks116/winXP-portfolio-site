@@ -345,9 +345,10 @@ const animation = {
 };
 
 const Container = styled.div`
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
-  font-family: Tahoma, 'Noto Sans', sans-serif;
+  @import url('https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&display=swap');
+  font-family: 'Tahoma', Arial, sans-serif;
   height: 100%;
+  font-size: 14px;
   overflow: hidden;
   position: relative;
   background: url(https://i.imgur.com/Zk6TR5k.jpg) no-repeat center center fixed;

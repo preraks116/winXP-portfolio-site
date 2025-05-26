@@ -89,19 +89,20 @@ function Icon({
 
 const IconsContainer = styled.div`
   position: absolute;
-  margin-top: 40px;
-  margin-left: 40px;
+  margin-top: 50px;
+  margin-left: 50px;
 `;
 
 const StyledIcon = styled(Icon)`
-  width: 70px;
-  margin-bottom: 30px;
+  width: 90px;
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Tahoma', Arial, sans-serif;
   &__text__container {
     width: 100%;
-    font-size: 10px;
+    font-size: 13px;
     color: white;
     text-shadow: 0 1px 1px black;
     margin-top: 5px;
@@ -127,14 +128,14 @@ const StyledIcon = styled(Icon)`
     flex-shrink: 1;
   }
   &__img__container {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     filter: ${({ isFocus, displayFocus }) =>
       isFocus && displayFocus ? 'drop-shadow(0 0 blue)' : ''};
   }
   &__img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     opacity: ${({ isFocus, displayFocus }) =>
       isFocus && displayFocus ? 0.5 : 1};
   }

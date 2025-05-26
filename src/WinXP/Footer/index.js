@@ -120,7 +120,8 @@ function FooterWindow({ id, icon, title, onMouseDown, isFocus }) {
 }
 
 const Container = styled.footer`
-  height: 30px;
+  height: 40px;
+  font-family: 'Tahoma', Arial, sans-serif;
   background: linear-gradient(
     to bottom,
     #1f2f86 0,
@@ -202,8 +203,8 @@ const Container = styled.footer`
     border-radius: 2px;
     margin-top: 2px;
     padding: 0 8px;
-    height: 22px;
-    font-size: 11px;
+    height: 30px;
+    font-size: 14px;
     background-color: #3c81f3;
     box-shadow: inset -1px 0px rgba(0, 0, 0, 0.3),
       inset 1px 1px 1px rgba(255, 255, 255, 0.2);
@@ -212,12 +213,12 @@ const Container = styled.footer`
     align-items: center;
   }
   .footer__icon {
-    height: 15px;
-    width: 15px;
+    height: 18px;
+    width: 18px;
   }
   .footer__text {
     position: absolute;
-    left: 27px;
+    left: 30px;
     right: 8px;
     white-space: nowrap;
     overflow: hidden;
@@ -258,7 +259,7 @@ const Container = styled.footer`
   .footer__time {
     margin: 0 5px;
     color: #fff;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: lighter;
     text-shadow: none;
   }
