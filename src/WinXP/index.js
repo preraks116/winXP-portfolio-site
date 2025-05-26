@@ -347,6 +347,12 @@ const animation = {
 const Container = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&display=swap');
   font-family: 'Tahoma', Arial, sans-serif;
+  /* Force pixelated rendering for authentic XP look */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+
   height: 100%;
   font-size: 14px;
   overflow: hidden;
@@ -356,6 +362,11 @@ const Container = styled.div`
   animation: ${({ state }) => animation[state]} 5s forwards;
   *:not(input):not(textarea) {
     user-select: none;
+    /* Ensure all child elements use pixelated rendering */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    font-smooth: never;
+    text-rendering: optimizeSpeed;
   }
 `;
 

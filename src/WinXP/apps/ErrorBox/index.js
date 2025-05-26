@@ -39,8 +39,8 @@ const Div = styled.div`
   background-color: #f5f5f5;
   width: 100%;
   height: 100%;
-  font-size: 11px;
-  padding: 12px;
+  font-size: 16px; /* Increased from 11px */
+  padding: 20px; /* Increased from 12px */
   display: flex;
   flex-direction: column;
   .error__top {
@@ -48,14 +48,14 @@ const Div = styled.div`
     flex: 1;
   }
   .error__img {
-    width: 30px;
-    height: 30px;
+    width: 48px; /* Increased from 30px */
+    height: 48px; /* Increased from 30px */
   }
   .error__messages {
-    padding: 2px 20px 12px;
+    padding: 4px 30px 20px; /* Increased padding */
   }
   .error__message {
-    line-height: 16px;
+    line-height: 22px; /* Increased from 16px */
   }
   .error__bottom {
     display: flex;
@@ -63,13 +63,14 @@ const Div = styled.div`
     justify-content: center;
   }
   .error__button {
-    width: 80px;
-    height: 22px;
+    width: 100px; /* Increased from 80px */
+    height: 32px; /* Increased from 22px */
     display: flex;
     border: 1px solid black;
     justify-content: center;
     align-items: center;
     box-shadow: inset -1px -1px 1px black;
+    font-size: 14px; /* Added explicit font size for button */
     &:hover:active {
       box-shadow: inset 1px 1px 1px black;
       & > * {
@@ -78,7 +79,7 @@ const Div = styled.div`
     }
   }
   .error__confirm {
-    line-height: 11px;
+    line-height: 14px; /* Increased from 11px */
   }
 `;
 

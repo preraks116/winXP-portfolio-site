@@ -1,8 +1,12 @@
 @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
 
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Disable font smoothing for pixelated XP look */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+  
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 14px;
 }
@@ -12,4 +16,9 @@ body {
 *:after,
 *:placeholder-shown {
   font-family: inherit;
+  /* Force pixelated rendering across all elements */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
 }

@@ -122,6 +122,12 @@ function FooterWindow({ id, icon, title, onMouseDown, isFocus }) {
 const Container = styled.footer`
   height: 40px;
   font-family: 'Tahoma', Arial, sans-serif;
+  /* Force pixelated rendering for authentic XP taskbar look */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+
   background: linear-gradient(
     to bottom,
     #1f2f86 0,
@@ -202,12 +208,22 @@ const Container = styled.footer`
     color: #fff;
     border-radius: 2px;
     margin-top: 2px;
-    padding: 0 8px;
+    padding: 0 10px;
     height: 30px;
     font-size: 14px;
-    background-color: #3c81f3;
-    box-shadow: inset -1px 0px rgba(0, 0, 0, 0.3),
-      inset 1px 1px 1px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(
+      to bottom,
+      #5ba0ff 0%,
+      #4a8cfc 25%,
+      #3f7ef5 50%,
+      #3674e8 75%,
+      #2f6bd9 100%
+    );
+    border: 1px solid #1e4eb8;
+    border-top: 1px solid #7bb3ff;
+    border-left: 1px solid #6ca6ff;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.4),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     display: flex;
     align-items: center;
@@ -215,19 +231,32 @@ const Container = styled.footer`
   .footer__icon {
     height: 18px;
     width: 18px;
+    margin-top: 1px;
+    flex-shrink: 0;
   }
   .footer__text {
     position: absolute;
-    left: 30px;
-    right: 8px;
+    left: 32px;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .footer__window.cover:hover {
-    background-color: #53a3ff;
-    box-shadow: inset -1px 0px rgba(0, 0, 0, 0.3),
-      inset 1px 1px 1px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(
+      to bottom,
+      #6fb0ff 0%,
+      #5d9cff 25%,
+      #528eff 50%,
+      #4784f8 75%,
+      #3c7ae9 100%
+    );
+    border-top: 1px solid #8cc5ff;
+    border-left: 1px solid #7db6ff;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   .footer__window.cover:before {
     display: block;
@@ -241,20 +270,61 @@ const Container = styled.footer`
     box-shadow: 2px 2px 3px rgba(255, 255, 255, 0.5);
   }
   .footer__window.cover:hover:active {
-    background-color: #1e52b7;
-    box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.3),
-      inset 1px 0 1px rgba(0, 0, 0, 0.7);
+    background: linear-gradient(
+      to bottom,
+      #1e52b7 0%,
+      #2a5bc4 25%,
+      #3567d1 50%,
+      #2f62c8 75%,
+      #1e52b7 100%
+    );
+    border: 1px solid #0d3585;
+    border-top: 1px solid #2a5bc4;
+    border-left: 1px solid #2558c0;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5),
+      inset 1px 1px 2px rgba(0, 0, 0, 0.3);
   }
   .footer__window.focus:hover {
-    background-color: #3576f3;
+    background: linear-gradient(
+      to bottom,
+      #2a5bc4 0%,
+      #3567d1 25%,
+      #4074de 50%,
+      #3a6fd8 75%,
+      #2f62c8 100%
+    );
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4),
+      inset 1px 1px 1px rgba(0, 0, 0, 0.2),
+      inset -1px -1px 1px rgba(255, 255, 255, 0.1);
   }
   .footer__window.focus:hover:active {
-    background-color: #1e52b7;
+    background: linear-gradient(
+      to bottom,
+      #1a4aa7 0%,
+      #2551b4 25%,
+      #305dc1 50%,
+      #2a58b8 75%,
+      #1a4aa7 100%
+    );
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.6),
+      inset 1px 1px 3px rgba(0, 0, 0, 0.4);
   }
   .footer__window.focus {
-    background-color: #1e52b7;
-    box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.2),
-      inset 1px 0 1px rgba(0, 0, 0, 0.7);
+    background: linear-gradient(
+      to bottom,
+      #1e52b7 0%,
+      #2a5bc4 20%,
+      #3567d1 40%,
+      #2f62c8 60%,
+      #2558c0 80%,
+      #1e52b7 100%
+    );
+    border: 1px solid #0d3585;
+    border-top: 1px solid #2a5bc4;
+    border-left: 1px solid #2558c0;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4),
+      inset 1px 1px 1px rgba(0, 0, 0, 0.3),
+      inset -1px -1px 1px rgba(255, 255, 255, 0.05);
   }
   .footer__time {
     margin: 0 5px;
@@ -262,6 +332,11 @@ const Container = styled.footer`
     font-size: 14px;
     font-weight: lighter;
     text-shadow: none;
+    /* Ensure time display is pixelated */
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
+    font-smooth: never;
+    text-rendering: optimizeSpeed;
   }
 `;
 
