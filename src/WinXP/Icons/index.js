@@ -104,7 +104,8 @@ const StyledIcon = styled(Icon)`
     width: 100%;
     font-size: 13px;
     color: white;
-    text-shadow: 0 1px 1px black;
+    text-shadow: 0 0 2px black, 0 0 4px black, 0 1px 1px black,
+      1px 1px 2px rgba(0, 0, 0, 0.8);
     margin-top: 5px;
     display: flex;
     justify-content: center;
